@@ -15,11 +15,17 @@
         }
     ],
     "type": "composer-plugin",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://satis.webservices.ufhealth.org"
+        }
+    ],
     "require": {
-        "php": ">=5.4",
-        "composer-plugin-api": "^1.0",
-        "icecave/isolator": "~2",
-        "eloquent/composer-npm-bridge": "~2.1"
+        "php": ">=7.2",
+        "composer-plugin-api": "^1",
+        "icecave/isolator": "^3",
+        "ufhealth/composer-npm-bridge": "^4"
     },
     "require-dev": {
         "composer/composer": "dev-master@dev"
