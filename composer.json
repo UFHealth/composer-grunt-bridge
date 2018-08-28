@@ -1,5 +1,5 @@
 {
-    "name": "johnpbloch/composer-grunt-bridge",
+    "name": "ufhealth/composer-grunt-bridge",
     "description": "Grunt integration for Composer packages.",
     "keywords": ["composer", "grunt", "package", "integration", "bridge", "plugin", "composer-plugin"],
     "homepage": "https://github.com/johnpbloch/composer-grunt-bridge",
@@ -8,6 +8,10 @@
         {
             "name": "John P Bloch",
             "email": "me@johnpbloch.com"
+        },
+        {
+            "name": "Chris Wiegman",
+            "email": "cwiegman@ufl.edu"
         }
     ],
     "type": "composer-plugin",
