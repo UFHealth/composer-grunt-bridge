@@ -14,15 +14,16 @@ namespace JPB\Composer\GruntBridge;
 /**
  * The interface implemented by Grunt clients.
  */
-interface GruntClientInterface {
-	/**
-	 * Run a grunt task.
-	 *
-	 * @param string|null $task The task to run, or null for the default task.
-	 * @param string|null $path The path to the directory containing the Gruntfile, or null to use the current working directory.
-	 *
-	 * @throws Exception\GruntNotFoundException      If the grunt executable cannot be located.
-	 * @throws Exception\GruntCommandFailedException If the operation fails.
-	 */
-	public function runTask( $task = null, $path = null );
+interface GruntClientInterface
+{
+    /**
+     * Run a grunt task.
+     *
+     * @param string|null $task The task to run, or null for the default task.
+     * @param string|null $path The path to the directory containing the Gruntfile, or null to use the current working directory.
+     *
+     * @throws Exception\GruntNotFoundException      If the grunt executable cannot be located.
+     * @throws Exception\GruntCommandFailedException If the operation fails.
+     */
+    public function runTask($task = null, $path = null);
 }

@@ -16,19 +16,20 @@ use Composer\IO\IOInterface;
 /**
  * The interface implemented by Grunt bridge factories.
  */
-interface GruntBridgeFactoryInterface {
-	/**
-	 * Construct a new Composer Grunt bridge plugin.
-	 *
-	 * @param IOInterface|null                $io           The i/o interface to use.
-	 * @param GruntVendorFinderInterface|null $vendorFinder The vendor finder to use.
-	 * @param GruntClientInterface|null       $client       The Grunt client to use.
-	 *
-	 * @return GruntBridgeInterface
-	 */
-	public function create(
-		IOInterface $io = null,
-		GruntVendorFinderInterface $vendorFinder = null,
-		GruntClientInterface $client = null
-	);
+interface GruntBridgeFactoryInterface
+{
+    /**
+     * Construct a new Composer Grunt bridge plugin.
+     *
+     * @param IOInterface|null $io The i/o interface to use.
+     * @param GruntVendorFinderInterface|null $vendorFinder The vendor finder to use.
+     * @param GruntClientInterface|null $client The Grunt client to use.
+     *
+     * @return GruntBridgeInterface
+     */
+    public function create(
+        IOInterface $io = null,
+        GruntVendorFinderInterface $vendorFinder = null,
+        GruntClientInterface $client = null
+    );
 }

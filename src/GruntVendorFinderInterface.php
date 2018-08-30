@@ -17,14 +17,15 @@ use Composer\Package\PackageInterface;
 /**
  * The interface implemented by Grunt vendor finders.
  */
-interface GruntVendorFinderInterface {
-	/**
-	 * Find all Grunt bridge enabled vendor packages.
-	 *
-	 * @param Composer             $composer The Composer object for the root project.
-	 * @param GruntBridgeInterface $bridge   The bridge to use.
-	 *
-	 * @return array<integer,PackageInterface> The list of Grunt bridge enabled vendor packages.
-	 */
-	public function find( Composer $composer, GruntBridgeInterface $bridge );
+interface GruntVendorFinderInterface
+{
+    /**
+     * Find all Grunt bridge enabled vendor packages.
+     *
+     * @param Composer $composer The Composer object for the root project.
+     * @param GruntBridgeInterface $bridge The bridge to use.
+     *
+     * @return array<integer,PackageInterface> The list of Grunt bridge enabled vendor packages.
+     */
+    public function find(Composer $composer, GruntBridgeInterface $bridge);
 }
