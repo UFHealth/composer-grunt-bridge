@@ -12,13 +12,16 @@
 namespace JPB\Composer\GruntBridge;
 
 use Composer\Util\ProcessExecutor;
-use Icecave\Isolator\Isolator;
+use Icecave\Isolator\IsolatorTrait;
 use Symfony\Component\Process\ExecutableFinder;
 
 /**
  * A simple client for performing Grunt operations.
  */
 class GruntClient implements GruntClientInterface {
+
+    use IsolatorTrait;
+
 	/**
 	 * Construct a new Grunt client.
 	 *
@@ -40,7 +43,6 @@ class GruntClient implements GruntClientInterface {
 
 		$this->processExecutor  = $processExecutor;
 		$this->executableFinder = $executableFinder;
-		$this->isolator         = Isolator::get( $isolator );
 	}
 
 	/**
