@@ -28,12 +28,10 @@ class GruntClient implements GruntClientInterface
      *
      * @param ProcessExecutor|null $processExecutor The process executor to use.
      * @param ExecutableFinder|null $executableFinder The executable finder to use.
-     * @param Isolator|null $isolator The isolator to use.
      */
     public function __construct(
         ProcessExecutor $processExecutor = null,
-        ExecutableFinder $executableFinder = null,
-        Isolator $isolator = null
+        ExecutableFinder $executableFinder = null
     )
     {
         if (null === $processExecutor) {
@@ -135,18 +133,7 @@ class GruntClient implements GruntClientInterface
         return $this->gruntPath;
     }
 
-    /**
-     * Get the isolator.
-     *
-     * @return Isolator The isolator.
-     */
-    protected function isolator()
-    {
-        return $this->isolator;
-    }
-
     private $processExecutor;
     private $executableFinder;
-    private $isolator;
     private $gruntPath;
 }
