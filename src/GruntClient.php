@@ -20,29 +20,35 @@ use Symfony\Component\Process\ExecutableFinder;
 class GruntClient
 {
 
-    use \Icecave\Isolator\IsolatorTrait;
+    /**
+     * Create a new Grunt client.
+     *
+     * @return self The newly created client.
+     */
+    public static function create(): self
+    {
+        return new self(new ProcessExecutor(), new ExecutableFinder());
+    }
 
     /**
      * Construct a new Grunt client.
      *
      * @param ProcessExecutor|null $processExecutor The process executor to use.
      * @param ExecutableFinder|null $executableFinder The executable finder to use.
+     * @param callable $getcwd The getcwd() implementation to use.
+     * @param callable $chdir The chdir() implementation to use.
      */
     public function __construct(
-        ProcessExecutor $processExecutor = null,
-        ExecutableFinder $executableFinder = null
+        ProcessExecutor $processExecutor,
+        ExecutableFinder $executableFinder,
+        $getcwd = 'getcwd',
+        $chdir = 'chdir'
     )
     {
-        if (null === $processExecutor) {
-            $processExecutor = new ProcessExecutor;
-        }
-        if (null === $executableFinder) {
-            $executableFinder = new ExecutableFinder;
-        }
-
         $this->processExecutor = $processExecutor;
         $this->executableFinder = $executableFinder;
-        $this->setIsolator();
+        $this->getcwd = $getcwd;
+        $this->chdir = $chdir;
     }
 
     /**
@@ -100,14 +106,14 @@ class GruntClient
         $command = implode(' ', array_map('escapeshellarg', $arguments));
 
         if (null !== $workingDirectoryPath) {
-            $previousWorkingDirectoryPath = $this->isolator()->getcwd();
-            $this->isolator()->chdir($workingDirectoryPath);
+            $previousWorkingDirectoryPath = call_user_func($this->getcwd);
+            call_user_func($this->chdir, $workingDirectoryPath);
         }
 
         $exitCode = $this->processExecutor()->execute($command);
 
         if (null !== $workingDirectoryPath) {
-            $this->isolator()->chdir($previousWorkingDirectoryPath);
+            call_user_func($this->chdir, $previousWorkingDirectoryPath);
         }
 
         if (0 !== $exitCode) {
@@ -126,7 +132,7 @@ class GruntClient
         if (null === $this->gruntPath) {
             $this->gruntPath = $this->executableFinder()->find('grunt');
             if (null === $this->gruntPath) {
-                throw new Exception\GruntNotFoundException;
+                throw new Exception\GruntNotFoundException();
             }
         }
 
@@ -135,5 +141,7 @@ class GruntClient
 
     private $processExecutor;
     private $executableFinder;
+    private $getcwd;
+    private $chdir;
     private $gruntPath;
 }
