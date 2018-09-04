@@ -23,9 +23,7 @@
     ],
     "require": {
         "php": ">=7.2",
-        "composer-plugin-api": "^1",
-        "icecave/isolator": "^3",
-        "ufhealth/composer-npm-bridge": "^4"
+        "composer-plugin-api": "^1"
     },
     "require-dev": {
         "composer/composer": "dev-master@dev"
