@@ -16,17 +16,19 @@ use Exception;
 /**
  * The grunt executable could not be found.
  */
-final class GruntNotFoundException extends Exception {
-	/**
-	 * Construct a new grunt not found exception.
-	 *
-	 * @param Exception|null $cause The cause, if available.
-	 */
-	public function __construct( Exception $cause = null ) {
-		parent::__construct(
-			'The grunt executable could not be found.',
-			0,
-			$cause
-		);
-	}
+final class GruntNotFoundException extends Exception
+{
+    /**
+     * Construct a new grunt not found exception.
+     *
+     * @param Exception|null $cause The cause, if available.
+     */
+    public function __construct(Exception $cause = null)
+    {
+        parent::__construct(
+            'The grunt executable could not be found.',
+            0,
+            $cause
+        );
+    }
 }

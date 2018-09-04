@@ -16,31 +16,34 @@ use Exception;
 /**
  * The Grunt command failed.
  */
-final class GruntCommandFailedException extends Exception {
-	/**
-	 * Construct a new Grunt command failed exception.
-	 *
-	 * @param string         $command The executed command.
-	 * @param Exception|null $cause   The cause, if available.
-	 */
-	public function __construct( $command, Exception $cause = null ) {
-		$this->command = $command;
+final class GruntCommandFailedException extends Exception
+{
+    /**
+     * Construct a new Grunt command failed exception.
+     *
+     * @param string $command The executed command.
+     * @param Exception|null $cause The cause, if available.
+     */
+    public function __construct($command, Exception $cause = null)
+    {
+        $this->command = $command;
 
-		parent::__construct(
-			sprintf( 'Execution of %s failed.', var_export( $command, true ) ),
-			0,
-			$cause
-		);
-	}
+        parent::__construct(
+            sprintf('Execution of %s failed.', var_export($command, true)),
+            0,
+            $cause
+        );
+    }
 
-	/**
-	 * Get the executed command.
-	 *
-	 * @return string The command.
-	 */
-	public function command() {
-		return $this->command;
-	}
+    /**
+     * Get the executed command.
+     *
+     * @return string The command.
+     */
+    public function command()
+    {
+        return $this->command;
+    }
 
-	private $command;
+    private $command;
 }
