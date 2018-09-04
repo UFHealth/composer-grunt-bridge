@@ -17,7 +17,7 @@ use Symfony\Component\Process\ExecutableFinder;
 /**
  * A simple client for performing Grunt operations.
  */
-class GruntClient implements GruntClientInterface
+class GruntClient
 {
 
     use \Icecave\Isolator\IsolatorTrait;

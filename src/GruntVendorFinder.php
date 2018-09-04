@@ -12,22 +12,21 @@
 namespace JPB\Composer\GruntBridge;
 
 use Composer\Composer;
-use Composer\Package\PackageInterface;
 
 /**
  * Finds Grunt bridge enabled vendor packages.
  */
-class GruntVendorFinder implements GruntVendorFinderInterface
+class GruntVendorFinder
 {
     /**
      * Find all Grunt bridge enabled vendor packages.
      *
      * @param Composer $composer The Composer object for the root project.
-     * @param GruntBridgeInterface $bridge The bridge to use.
+     * @param GruntBridge $bridge The bridge to use.
      *
      * @return array<integer,PackageInterface> The list of Grunt bridge enabled vendor packages.
      */
-    public function find(Composer $composer, GruntBridgeInterface $bridge)
+    public function find(Composer $composer, GruntBridge $bridge)
     {
         $packages = $composer->getRepositoryManager()->getLocalRepository()
             ->getPackages();

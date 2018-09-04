@@ -26,9 +26,9 @@ class GruntBridgePlugin implements PluginInterface, EventSubscriberInterface
     /**
      * Construct a new Composer Grunt bridge plugin.
      *
-     * @param GruntBridgeFactoryInterface|null $bridgeFactory The bridge factory to use.
+     * @param GruntBridgeFactory|null $bridgeFactory The bridge factory to use.
      */
-    public function __construct(GruntBridgeFactoryInterface $bridgeFactory = null)
+    public function __construct(GruntBridgeFactory $bridgeFactory = null)
     {
         if (null === $bridgeFactory) {
             $bridgeFactory = new GruntBridgeFactory;
@@ -40,7 +40,7 @@ class GruntBridgePlugin implements PluginInterface, EventSubscriberInterface
     /**
      * Get the bridge factory.
      *
-     * @return GruntBridgeFactoryInterface The bridge factory.
+     * @return GruntBridgeFactory The bridge factory.
      */
     public function bridgeFactory()
     {
@@ -55,7 +55,11 @@ class GruntBridgePlugin implements PluginInterface, EventSubscriberInterface
      */
     public function activate(Composer $composer, IOInterface $io)
     {
-        // no action required
+        // preload classes to prevent errors when removing the plugin
+        class_exists(GruntBridge::class);
+        class_exists(GruntBridgeFactory::class);
+        class_exists(GruntClient::class);
+        class_exists(GruntVendorFinder::class);
     }
 
     /**
@@ -75,30 +79,25 @@ class GruntBridgePlugin implements PluginInterface, EventSubscriberInterface
      * Handle post install command events.
      *
      * @param Event $event The event to handle.
-     *
-     * @throws Exception\GruntNotFoundException      If the grunt executable cannot be located.
-     * @throws Exception\GruntCommandFailedException If the operation fails.
      */
     public function onPostInstallCmd(Event $event)
     {
-        $this->bridgeFactory()
-            ->create($event->getIO())
+
+        $this->bridgeFactory->createBridge($event->getIO())
             ->runGruntTasks($event->getComposer(), $event->isDevMode());
+
     }
 
     /**
      * Handle post update command events.
      *
      * @param Event $event The event to handle.
-     *
-     * @throws Exception\GruntNotFoundException      If the grunt executable cannot be located.
-     * @throws Exception\GruntCommandFailedException If the operation fails.
      */
     public function onPostUpdateCmd(Event $event)
     {
-        $this->bridgeFactory()
-            ->create($event->getIO())
-            ->runGruntTasks($event->getComposer(), true);
+
+        $this->bridgeFactory->createBridge($event->getIO())
+            ->runGruntTasks($event->getComposer(), $event->isDevMode());
     }
 
     private $bridgeFactory;

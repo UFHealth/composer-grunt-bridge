@@ -20,19 +20,19 @@ use Composer\Util\ProcessExecutor;
 /**
  * Runs Grunt tasks for Composer projects.
  */
-class GruntBridge implements GruntBridgeInterface
+class GruntBridge
 {
     /**
      * Construct a new Composer Grunt bridge plugin.
      *
      * @param IOInterface|null $io The i/o interface to use.
-     * @param GruntVendorFinderInterface|null $vendorFinder The vendor finder to use.
-     * @param GruntClientInterface|null $client The Grunt client to use.
+     * @param GruntVendorFinder|null $vendorFinder The vendor finder to use.
+     * @param GruntClient|null $client The Grunt client to use.
      */
     public function __construct(
         IOInterface $io = null,
-        GruntVendorFinderInterface $vendorFinder = null,
-        GruntClientInterface $client = null
+        GruntVendorFinder $vendorFinder = null,
+        GruntClient $client = null
     )
     {
         if (null === $io) {
@@ -51,7 +51,7 @@ class GruntBridge implements GruntBridgeInterface
     }
 
     /**
-     * Get the i/o interface.
+     * Get the i/o .
      *
      * @return IOInterface The i/o interface.
      */
@@ -63,7 +63,7 @@ class GruntBridge implements GruntBridgeInterface
     /**
      * Get the vendor finder.
      *
-     * @return GruntVendorFinderInterface The vendor finder.
+     * @return GruntVendorFinder The vendor finder.
      */
     public function vendorFinder()
     {
@@ -73,27 +73,26 @@ class GruntBridge implements GruntBridgeInterface
     /**
      * Get the Grunt client.
      *
-     * @return GruntClientInterface The Grunt client.
+     * @return GruntClient The Grunt client.
      */
     public function client()
     {
         return $this->client;
     }
 
-    public function runGruntTasks(Composer $composer, $isDevMode = null)
+    public function runGruntTasks(Composer $composer, $installDev = false)
     {
-        $isDevMode = (bool)$isDevMode;
         $this->io()->write(
             '<info>Running Grunt tasks for root project</info>'
         );
 
-        if ($this->isDependantPackage($composer->getPackage(), $isDevMode)) {
+        if ($this->isDependantPackage($composer->getPackage(), $installDev)) {
             $this->client()->runTask($this->getTask($composer->getPackage()));
         } else {
             $this->io()->write('Nothing to grunt');
         }
 
-        $this->installForVendors($composer);
+        $this->installForVendors($composer, $installDev);
     }
 
     /**
@@ -114,14 +113,14 @@ class GruntBridge implements GruntBridgeInterface
         }
 
         foreach ($package->getRequires() as $link) {
-            if ('johnpbloch/composer-grunt-bridge' === $link->getTarget()) {
+            if ('ufhealth/composer-grunt-bridge' === $link->getTarget()) {
                 return true;
             }
         }
 
         if ($includeDevDependencies) {
             foreach ($package->getDevRequires() as $link) {
-                if ('johnpbloch/composer-grunt-bridge' === $link->getTarget()) {
+                if ('ufhealth/composer-grunt-bridge' === $link->getTarget()) {
                     return true;
                 }
             }
@@ -160,6 +159,7 @@ class GruntBridge implements GruntBridgeInterface
         );
 
         $packages = $this->vendorFinder()->find($composer, $this);
+
         if (count($packages) > 0) {
             foreach ($packages as $package) {
                 $this->io()->write(
