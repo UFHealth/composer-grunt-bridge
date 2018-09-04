@@ -13,9 +13,7 @@ namespace JPB\Composer\GruntBridge;
 
 use Composer\Composer;
 use Composer\IO\IOInterface;
-use Composer\IO\NullIO;
 use Composer\Package\PackageInterface;
-use Composer\Util\ProcessExecutor;
 
 /**
  * Runs Grunt tasks for Composer projects.
@@ -35,39 +33,9 @@ class GruntBridge
         GruntClient $client = null
     )
     {
-        if (null === $io) {
-            $io = new NullIO;
-        }
-        if (null === $vendorFinder) {
-            $vendorFinder = new GruntVendorFinder;
-        }
-        if (null === $client) {
-            $client = new GruntClient(new ProcessExecutor($io));
-        }
-
         $this->io = $io;
         $this->vendorFinder = $vendorFinder;
         $this->client = $client;
-    }
-
-    /**
-     * Get the i/o .
-     *
-     * @return IOInterface The i/o interface.
-     */
-    public function io()
-    {
-        return $this->io;
-    }
-
-    /**
-     * Get the vendor finder.
-     *
-     * @return GruntVendorFinder The vendor finder.
-     */
-    public function vendorFinder()
-    {
-        return $this->vendorFinder;
     }
 
     /**
@@ -80,49 +48,36 @@ class GruntBridge
         return $this->client;
     }
 
-    public function runGruntTasks(Composer $composer, $installDev = false)
+    public function runGruntTasks(Composer $composer)
     {
-        $this->io()->write(
+        $this->io->write(
             '<info>Running Grunt tasks for root project</info>'
         );
 
-        if ($this->isDependantPackage($composer->getPackage(), $installDev)) {
-            $this->client()->runTask($this->getTask($composer->getPackage()));
+        if ($this->isDependantPackage($composer->getPackage())) {
+            $this->client->runTask($this->getTask($composer->getPackage()));
         } else {
-            $this->io()->write('Nothing to grunt');
+            $this->io->write('Nothing to grunt');
         }
 
-        $this->installForVendors($composer, $installDev);
+        $this->installForVendors($composer);
     }
 
     /**
      * Returns true if the supplied package requires the Composer Grunt bridge.
      *
      * @param PackageInterface $package The package to inspect.
-     * @param boolean|null $includeDevDependencies True if the dev dependencies should also be inspected.
      *
      * @return boolean True if the package requires the bridge.
      */
     public function isDependantPackage(
-        PackageInterface $package,
-        $includeDevDependencies = null
+        PackageInterface $package
     )
     {
-        if (null === $includeDevDependencies) {
-            $includeDevDependencies = false;
-        }
 
         foreach ($package->getRequires() as $link) {
             if ('ufhealth/composer-grunt-bridge' === $link->getTarget()) {
                 return true;
-            }
-        }
-
-        if ($includeDevDependencies) {
-            foreach ($package->getDevRequires() as $link) {
-                if ('ufhealth/composer-grunt-bridge' === $link->getTarget()) {
-                    return true;
-                }
             }
         }
 
@@ -154,29 +109,29 @@ class GruntBridge
      */
     protected function installForVendors(Composer $composer)
     {
-        $this->io()->write(
+        $this->io->write(
             '<info>Running Grunt tasks for Composer dependencies</info>'
         );
 
-        $packages = $this->vendorFinder()->find($composer, $this);
+        $packages = $this->vendorFinder->find($composer, $this);
 
         if (count($packages) > 0) {
             foreach ($packages as $package) {
-                $this->io()->write(
+                $this->io->write(
                     sprintf(
                         '<info>Running Grunt tasks for %s</info>',
                         $package->getPrettyName()
                     )
                 );
 
-                $this->client()->runTask(
+                $this->client->runTask(
                     $this->getTask($package),
                     $composer->getInstallationManager()
                         ->getInstallPath($package)
                 );
             }
         } else {
-            $this->io()->write('Nothing to grunt');
+            $this->io->write('Nothing to grunt');
         }
     }
 

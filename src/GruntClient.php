@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Composer Grunt bridge package.
  *
@@ -35,8 +34,8 @@ class GruntClient
      *
      * @param ProcessExecutor|null $processExecutor The process executor to use.
      * @param ExecutableFinder|null $executableFinder The executable finder to use.
-     * @param callable $getcwd The getcwd() implementation to use.
-     * @param callable $chdir The chdir() implementation to use.
+     * @param string $getcwd The getcwd() implementation to use.
+     * @param string $chdir The chdir() implementation to use.
      */
     public function __construct(
         ProcessExecutor $processExecutor,
@@ -49,26 +48,6 @@ class GruntClient
         $this->executableFinder = $executableFinder;
         $this->getcwd = $getcwd;
         $this->chdir = $chdir;
-    }
-
-    /**
-     * Get the process executor.
-     *
-     * @return ProcessExecutor The process executor.
-     */
-    public function processExecutor()
-    {
-        return $this->processExecutor;
-    }
-
-    /**
-     * Get the executable finder.
-     *
-     * @return ExecutableFinder The executable finder.
-     */
-    public function executableFinder()
-    {
-        return $this->executableFinder;
     }
 
     /**
@@ -110,7 +89,7 @@ class GruntClient
             call_user_func($this->chdir, $workingDirectoryPath);
         }
 
-        $exitCode = $this->processExecutor()->execute($command);
+        $exitCode = $this->processExecutor->execute($command);
 
         if (null !== $workingDirectoryPath) {
             call_user_func($this->chdir, $previousWorkingDirectoryPath);
@@ -122,7 +101,7 @@ class GruntClient
     }
 
     /**
-     * Get the grunt exectable path.
+     * Get the grunt executable path.
      *
      * @return string                           The path to the grunt executable.
      * @throws Exception\GruntNotFoundException If the grunt executable cannot be located.
@@ -130,7 +109,7 @@ class GruntClient
     protected function gruntPath()
     {
         if (null === $this->gruntPath) {
-            $this->gruntPath = $this->executableFinder()->find('grunt');
+            $this->gruntPath = $this->executableFinder->find('grunt');
             if (null === $this->gruntPath) {
                 throw new Exception\GruntNotFoundException();
             }
