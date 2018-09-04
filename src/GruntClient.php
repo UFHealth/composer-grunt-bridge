@@ -89,7 +89,11 @@ class GruntClient
             call_user_func($this->chdir, $workingDirectoryPath);
         }
 
-        $exitCode = $this->processExecutor->execute($command);
+        $exitCode = 0;
+
+        if ( file_exists( 'Gruntfile.js')) {
+            $exitCode = $this->processExecutor->execute($command);
+        }
 
         if (null !== $workingDirectoryPath) {
             call_user_func($this->chdir, $previousWorkingDirectoryPath);
