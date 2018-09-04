@@ -43,6 +43,7 @@ class GruntClient implements GruntClientInterface
 
         $this->processExecutor = $processExecutor;
         $this->executableFinder = $executableFinder;
+        $this->setIsolator();
     }
 
     /**
