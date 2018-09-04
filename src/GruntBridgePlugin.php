@@ -31,7 +31,7 @@ class GruntBridgePlugin implements PluginInterface, EventSubscriberInterface
     public function __construct(GruntBridgeFactory $bridgeFactory = null)
     {
         if (null === $bridgeFactory) {
-            $bridgeFactory = new GruntBridgeFactory;
+            $bridgeFactory = GruntBridgeFactory::create();
         }
 
         $this->bridgeFactory = $bridgeFactory;
