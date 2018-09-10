@@ -70,8 +70,8 @@ class GruntBridgePlugin implements PluginInterface, EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            ScriptEvents::POST_INSTALL_CMD => 'onPostInstallCmd',
-            ScriptEvents::POST_UPDATE_CMD => 'onPostUpdateCmd',
+            ScriptEvents::POST_INSTALL_CMD => array('onPostInstallCmd', 1)
+            ScriptEvents::POST_UPDATE_CMD => array('onPostUpdateCmd', 1),
         );
     }
 
